@@ -1,4 +1,6 @@
 import math
+import sklearn
+import numpy as np
 
 if __name__ == '__main__':
-    print("hi")
+    print(np.zeros(5))
