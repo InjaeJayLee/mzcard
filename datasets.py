@@ -6,15 +6,19 @@ test_dataset_path = 'datasets/fraudTest.csv'
 
 def load_train_dataset(is_dataframe=True):
     """
-        :param is_dataframe: if this is true, return pandas dataframe, otherwise numpy 2D array
-        :return: pandas dataframe or numpy 2D-array
+        params:
+            is_dataframe: if this is true, return pandas dataframe, otherwise numpy 2D array
+
+        return: pandas dataframe or numpy 2D-array
     """
     return _load_dataset(train_dataset_path, is_dataframe)
 
 def load_test_dataset(is_dataframe=True):
     """
-        :param is_dataframe: if this is true, return pandas dataframe, otherwise numpy 2D array
-        :return: pandas dataframe or numpy 2D-array
+        params:
+            is_dataframe: if this is true, return pandas dataframe, otherwise numpy 2D array
+
+        return: pandas dataframe or numpy 2D-array
     """
     return _load_dataset(test_dataset_path, is_dataframe)
 
