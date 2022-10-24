@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from typing import Tuple
 import pandas as pd
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 
 ########## Preprocessing ##########
