@@ -55,8 +55,6 @@ def get_vif(df: pd.DataFrame):
     vif["Feature Name"] = target_df.columns
     vif = vif.sort_values("VIF Factor").reset_index(drop=True)
     return vif
-
-
 ###################################
 
 
@@ -69,7 +67,7 @@ def draw_heatmap(df: pd.DataFrame):
     """
     plt.figure(figsize=(30, 30))
     sns.set(font_scale=2.2)
-    sns.heatmap(df.corr(), cmap='vlag', annot=True, annot_kws={"size": 24})
+    sns.heatmap(df.corr(numeric_only=True), cmap='vlag', annot=True, annot_kws={"size": 24})
     plt.show()
 
 def set_plot_labels(ax, title: str, xlab: str="", ylab: str="", legend:List=None, xticks=None, yticks=None):
