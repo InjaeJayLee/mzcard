@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 from typing import Tuple, List
 import pandas as pd
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+import folium
 
+# constants
+state_geo = 'datasets/us-states.json'
 
 ########## Preprocessing ##########
 onehot_encoders = {}
@@ -90,4 +93,18 @@ def set_plot_labels(ax, title: Tuple[str, int]=None, xlab: Tuple[str, int]=None,
         ax.set_ylabel(ylab[0], size=ylab[1])
     if legend:
         ax.legend(labels=legend[0], fontsize=legend[1])
+
+def get_map_with_markers(df: pd.DataFrame, lat: str, long: str, marker_color:str = '#E75858', marker_rad:float = 0.02):
+    init_map_lat = df[lat].mean()
+    init_map_long = df[long].mean()
+
+    fol_map = folium.Map(location=[init_map_lat, init_map_long], zoom_start=3)
+    folium.Choropleth(geo_data=state_geo, fill_color='white').add_to(fol_map)
+    for row in range(len(df)):
+        cm = folium.CircleMarker([df.loc[row, lat], df.loc[row, long]],
+                                 color=marker_color,
+                                 radius=marker_rad)
+        cm.add_to(fol_map)
+
+    return fol_map
 ###################################
