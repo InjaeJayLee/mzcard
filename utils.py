@@ -10,11 +10,15 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 ########## Preprocessing ##########
 onehot_encoders = {}
-def change_column_name(df: pd.DataFrame, from_to: Tuple[str, str]):
-    old_name, new_name = from_to
-    df.rename(columns={old_name: new_name}, inplace=True)
 
 def convert_category_to_num_label(df: pd.DataFrame, col_name: str):
+    """
+        params:
+            df: pandas dataframe
+            col_name: the name of a column to convert
+
+        return: a new data frame with the onehot encoding
+    """
     encoder = LabelEncoder()
     store_label = encoder.fit_transform(df[col_name])
     df[col_name] = store_label
@@ -22,7 +26,7 @@ def convert_category_to_num_label(df: pd.DataFrame, col_name: str):
 def get_new_df_with_onehot_encoding(df: pd.DataFrame, col_name: str, is_train_data: bool):
     """
         params:
-            df: if this is true, return pandas dataframe, otherwise numpy 2D array
+            df: pandas dataframe
             col_name: the name of a column to convert
             is_train_data: whether or not it is train data
 
@@ -63,22 +67,27 @@ def get_vif(df: pd.DataFrame):
 def draw_heatmap(df: pd.DataFrame):
     """
         params
-            df: a data frame to draw a heatmap of
+            df: a pandas dataframe to use to draw a heatmap of it
     """
     plt.figure(figsize=(30, 30))
     sns.set(font_scale=2.2)
     sns.heatmap(df.corr(numeric_only=True), cmap='vlag', annot=True, annot_kws={"size": 24})
     plt.show()
 
-def set_plot_labels(ax, title: str, xlab: str="", ylab: str="", legend:List=None, xticks=None, yticks=None):
-    ax.set_xlabel(xlab, size=25)
-    ax.set_ylabel(ylab, size=25)
-    plt.title(title, fontsize=35)
+def set_plot_labels(ax, title: Tuple[str, int]=None, xlab: Tuple[str, int]=None, ylab: Tuple[str, int]=None, legend:Tuple[List, int]=None):
+    """
+        params
+            title: title tuple containing a string of its name and its font size
+            xlab: x label tuple containing a string of its name and its font size
+            ylab: y label tuple containing a string of its name and its font size
+            legend: legend tuple containing a string of its name and its font size
+    """
+    if title:
+        plt.title(title[0], fontsize=title[1])
+    if xlab:
+        ax.set_xlabel(xlab[0], size=xlab[1])
+    if ylab:
+        ax.set_ylabel(ylab[0], size=ylab[1])
     if legend:
-        plt.legend(labels=legend, fontsize=20)
-    if xticks:
-        plt.xticks(xticks, size=20)
-    if yticks:
-        plt.yticks(yticks, size=20)
-    return ax
+        ax.legend(labels=legend[0], fontsize=legend[1])
 ###################################
