@@ -22,6 +22,8 @@ fastjsonschema==2.16.2
 folium==0.13.0
 fonttools==4.37.4
 idna==3.4
+imbalanced-learn==0.9.1
+imblearn==0.0
 importlib-metadata==5.0.0
 ipykernel==6.16.1
 ipython==8.5.0
