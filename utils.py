@@ -7,6 +7,7 @@ from typing import Tuple, List
 import pandas as pd
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import folium
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
 # constants
 state_geo = 'datasets/us-states.json'
@@ -38,16 +39,16 @@ def get_new_df_with_onehot_encoding(df: pd.DataFrame, col_name: str, is_train_da
     encoder = OneHotEncoder(sparse=False)
     if is_train_data:
         cat = encoder.fit_transform(df[[col_name]])
-        new_cols = pd.DataFrame(cat, columns=[col_name + "_" + col for col in encoder.categories_[0]])
-        new_df = pd.concat([df.drop(columns=[col_name]), new_cols], axis=1)
+        one_hot_features = pd.DataFrame(cat, columns=[col_name + "_" + col for col in encoder.categories_[0]])
+        new_df = pd.concat([df.drop(columns=[col_name]), one_hot_features], axis=1)
         onehot_encoders[col_name] = encoder
         return new_df
     else:
         assert(onehot_encoders.get(col_name))
         encoder = onehot_encoders[col_name]
         cat = encoder.transform(df[[col_name]])
-        new_cols = pd.DataFrame(cat, columns=[col_name + "_" + col for col in encoder.categories_[0]])
-        new_df = pd.concat([df.drop(columns=[col_name]), new_cols], axis=1)
+        one_hot_features = pd.DataFrame(cat, columns=[col_name + "_" + col for col in encoder.categories_[0]])
+        new_df = pd.concat([df.drop(columns=[col_name]), one_hot_features], axis=1)
         return new_df
 ###################################
 
@@ -72,7 +73,7 @@ def draw_heatmap(df: pd.DataFrame):
         params
             df: a pandas dataframe to use to draw a heatmap of it
     """
-    plt.figure(figsize=(30, 30))
+    plt.figure(figsize=(20, 20))
     sns.set(font_scale=2.2)
     sns.heatmap(df.corr(numeric_only=True), cmap='vlag', annot=True, annot_kws={"size": 24})
     plt.show()
@@ -107,4 +108,18 @@ def get_map_with_markers(df: pd.DataFrame, lat: str, long: str, marker_color:str
         cm.add_to(fol_map)
 
     return fol_map
+###################################
+
+
+############ Evaluation ###########
+def print_eval_metrics(y_test, y_pred):
+
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_score = roc_auc_score(y_test, y_pred, average='macro')
+
+    print(f"Accuracy: {accuracy},   Precision: {precision},   Recall: {recall}")
+    print(f"F1-score: {f1},   AUC: {roc_score}")
 ###################################
