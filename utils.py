@@ -7,7 +7,7 @@ from typing import Tuple, List
 import pandas as pd
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import folium
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.metrics import confusion_matrix, classification_report, ConfusionMatrixDisplay
 
 # constants
 state_geo = 'datasets/us-states.json'
@@ -113,13 +113,8 @@ def get_map_with_markers(df: pd.DataFrame, lat: str, long: str, marker_color:str
 
 ############ Evaluation ###########
 def print_eval_metrics(y_test, y_pred):
-
-    accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
-    roc_score = roc_auc_score(y_test, y_pred, average='macro')
-
-    print(f"Accuracy: {accuracy},   Precision: {precision},   Recall: {recall}")
-    print(f"F1-score: {f1},   AUC: {roc_score}")
+    p = ConfusionMatrixDisplay(confusion_matrix(y_test, y_pred))
+    p.plot()
+    plt.show()
+    print(classification_report(y_test, y_pred))
 ###################################
