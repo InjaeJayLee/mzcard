@@ -108,6 +108,23 @@ def get_map_with_markers(df: pd.DataFrame, lat: str, long: str, marker_color:str
         cm.add_to(fol_map)
 
     return fol_map
+
+def draw_feature_importance_plot(feat_names: np.array, feat_importance: np.array):
+    """
+        Draw a bar graph of feature importance
+
+        params
+            feat_names: feature names
+            feat_importance: feature importance
+    """
+    data = {'feature_names': feat_names, 'feature_importance': feat_importance * 100}
+    fi_df = pd.DataFrame(data)
+    fi_df.sort_values(by=['feature_importance'], ascending=False, inplace=True)
+
+    plt.figure(figsize=(20, 20))
+    ax = sns.barplot(x=fi_df['feature_importance'], y=fi_df['feature_names'])
+    set_plot_labels(ax, ("Feature Importance", 40), ("feature importance (%)", 30), ("feature names", 30))
+    plt.show()
 ###################################
 
 
